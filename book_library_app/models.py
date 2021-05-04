@@ -31,6 +31,15 @@ class Author(db.Model):
 
     def __repr__(self):
         return f'<{self.__class__.__name__}>: {self.first_name} {self.last_name}'
+    def to_json(self):
+        author_to_json ={
+            "id" : self.id,
+            "first_name" : self.first_name,
+            "last_name" : self.last_name,
+            "birth_date" : self.birth_date
+        }
+        return author_to_json
+
 
 class User(db.Model):
     __tablename__ = 'users'

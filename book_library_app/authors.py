@@ -9,34 +9,20 @@ def get_authors():
     authors = Author.query
     list_of_authors = []
     for author in authors:
-        dicts = {"first_name": author.first_name,
-                 "last_name": author.last_name,
-                 "id": author.id,
-                 "birth_date": str(author.birth_date)
-                 }
-        list_of_authors.append(dicts)
+        list_of_authors.append(author.to_json())
     return jsonify({'success': True, 'data': list_of_authors})
 
 
 @app.route('/api/v1/authors/<int:author_id>', methods=['GET'])
 def get_author(author_id: int):
-    # author = Author.query.filter_by(id = author_id).one()
-    authors = db.session.query(Author).filter(Author.id == author_id)
-    single_author = []
-    for author in authors:
-        dicts = {"first_name": author.first_name,
-                 "last_name": author.last_name,
-                 "id": author.id,
-                 "birth_date": str(author.birth_date)
-                 }
-        single_author.append(dicts)
-    return jsonify(single_author)
+    author = Author.query.filter(Author.id == author_id).one()
+    return jsonify(author.to_json())
 
 
 # obsluga POST ,z racji ze jest to metoda post to argument jest przegazany w requescie
 @app.route('/api/v1/authors/<int:author_id>', methods=['PUT'])
 def update_author(author_id: int):
-    author = db.session.query(Author).filter(Author.id == author_id).first()
+    author = Author.query.filter(Author.id == author_id).one()
     if not author:
         message = f"Author with {author_id} not found"
     else:
@@ -70,7 +56,7 @@ def create_authors():
 
 @app.route('/api/v1/authors/<int:author_id>', methods=['DELETE'])
 def delete_author(author_id: int):
-    author = Author.query.filter_by(id=author_id).one()
+    author = Author.query.filter(Author.id == author_id).one()
     db.session.delete(author)
     db.session.commit()
     return jsonify({'success': True, 'data': f'Author with id {author_id} has been deleted'})

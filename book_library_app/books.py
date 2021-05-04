@@ -5,9 +5,10 @@ from book_library_app import app, db
 from book_library_app.models import Book, Author
 
 
-@app.route('/books', methods=['GET'])
+
+@app.route('/api/v1/books', methods=['GET'])
 def get_books():
-    books = Book.query
+    books = Book.query.all()
     book_list=[]
     for book in books:
         dicts={
@@ -22,10 +23,10 @@ def get_books():
     return jsonify(book_list)
 
 
-@app.route('/books/<int:book_id>', methods=['GET'])
+@app.route('/api/v1/books/<int:book_id>', methods=['GET'])
 def get_book(book_id: int):
     #author = Author.query.filter_by(id = author_id).one()
-    books = db.session.query(Book).filter(Book.id == book_id)
+    books = db.session.query(Book).filter(Book.id == book_id).all()
     single_book = []
     for book in books:
         dicts = {"id": book.id, "title": book.title,
@@ -36,7 +37,7 @@ def get_book(book_id: int):
         single_book.append(dicts)
     return jsonify(single_book)
 
-@app.route('/books/<int:book_id>', methods=['PUT'])
+@app.route('/api/v1/books/<int:book_id>', methods=['PUT'])
 def update_book(book_id: int):
     book = db.session.query(Book).filter(Book.id == book_id).first()
     if not book:
@@ -53,7 +54,7 @@ def update_book(book_id: int):
         db.session.commit()
 
     return jsonify({"message": message})
-@app.route('/authors/<int:author_id>/books', methods=['POST'])
+@app.route('/api/v1/authors/<int:author_id>/books', methods=['POST'])
 def create_book(author_id: int):
     author_verification = Author.query.filter(Author.id == author_id).first()
     if not author_verification:
@@ -76,13 +77,13 @@ def create_book(author_id: int):
 
 
 @app.route('/api/v1/books/<int:book_id>', methods=['DELETE'])
-def delete_author(book_id: int):
+def delete_book(book_id: int):
     book = Book.query.filter_by(id=book_id).one()
     db.session.delete(book)
     db.session.commit()
     return jsonify({'success': True, 'data': f'Book with id {book_id} has been deleted'})
 
-@app.route('/authors/<int:author_id>/books' , methods = ['GET'])
+@app.route('/api/v1/authors/<int:author_id>/books' , methods = ['GET'])
 def get_all_author_books(author_id: int):
     author_verification = Author.query.filter(Author.id == author_id).first()
     if not author_verification:
