@@ -1,0 +1,18 @@
+"Baza danych tworzenie
+1.dodawanie do bazy dancyh z poziomu konsoli w kodzie tworzymy odpowiednie metody ale dodajemy w konsoli np dane do mockowania0cert"
+
+2 Migracja bazy
+flask migrate -m wiadomosc
+flask db upgrade
+
+Jak chce robic zmiany w mojej bazie w strukturze
+
+cli to jest takie cos ze mozemy pisac metody ktore pozniej wywolujemy z lini komend
+
+
+request.args.get('fields')
+
+spraawdzic co to Nested
+
+
+uwierzytelnianiae jest wymagane zawsze wtedy kiedy uzytkownik wysyla zapytanie ktore cos zmienia w bazie post put delete
