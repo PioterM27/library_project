@@ -2,9 +2,12 @@ from flask import jsonify, request
 from book_library_app import app, db
 from book_library_app.models import Author
 from datetime import datetime
+from flask_login import login_required
+
 
 
 @app.route('/api/v1/authors', methods=['GET'])
+@login_required
 def get_authors():
     authors = Author.query
     list_of_authors = []

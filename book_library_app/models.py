@@ -8,7 +8,7 @@ from typing import Tuple
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from flask import current_app
-
+from flask_login import UserMixin
 from datetime import datetime, date, timedelta
 from marshmallow import Schema, fields, validate, validates, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -41,7 +41,7 @@ class Author(db.Model):
         return author_to_json
 
 
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False, unique=True, index=True)
@@ -61,6 +61,22 @@ class User(db.Model):
             'exp': datetime.utcnow() + timedelta(minutes=current_app.config.get('JWT_EXPIRED_MINUTES', 30))
         }
         return jwt.encode(payload, current_app.config.get('SECRET_KEY'))
+    def is_authenticated(self):
+        return True
+    def is_active(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return str(self.id)
+    # @LoginManager.user_loader
+    # def load_user(self,user_id):
+    #     return User.query.get(int(user_id))
+
+    # @login_manager.user_accessed
+    # def load_user(self,user_id):
+    #     print("test_logowania")
+    #     return User.query.get(int(user_id))
 
 class Book(db.Model):
     __tablename__ = "books"
@@ -83,6 +99,7 @@ class Book(db.Model):
             "description": self.description,
             "author": str(self.author.first_name) + ' ' + str(self.author.last_name)
         }
+
 
 # #Schema dziedziczy z pakietu marshmalow ktory obrabia dane z bazy na jsona
 # class AuthorSchema(Schema):
