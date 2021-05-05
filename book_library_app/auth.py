@@ -1,6 +1,7 @@
 from flask import abort, jsonify,request
 from book_library_app import db,app
 from book_library_app.models import User
+from flask_login import login_required,login_user,logout_user,current_user
 
 
 @app.route('/register', methods=['POST'])
@@ -37,10 +38,18 @@ def login():
     if not user.is_password_valid(request_register['password']):
         abort(401, description="Invalid credential")
 #error 401 jest nie zaimplementowany jak wszystkie errory zreszta
+    if user != 'Guest':
+        login_user(user)
+        return jsonify({'success': True, 'token': user.is_active()}), 201
+    # token = user.generate_jwt()
 
-    token = user.generate_jwt()
-
-    return jsonify({
-        'success': True,
-        'token': token
-    }), 201
+@app.route('/logout', methods=['POST'])
+def logout():
+    crn_user = current_user.is_authenticated
+    if crn_user:
+        crn_user_name = current_user.username
+        logout_user()
+        return jsonify({"success": True,
+                    "current_user": f"User {str(crn_user_name)} logout"})
+    else:
+        return jsonify({"message": "Any user available at this session"})
