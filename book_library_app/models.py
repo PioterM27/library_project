@@ -74,6 +74,15 @@ class Book(db.Model):
 
     def __repr__(self):
         return f'{self.title} - {self.author.first_name} {self.author.last_name}'
+    def to_json(self):
+        book_to_json={
+            "id": self.id,
+            "title": self.title,
+            "isbn": self.isbn,
+            "number_of_pages": self.number_of_pages,
+            "description": self.description,
+            "author": str(self.author.first_name) + ' ' + str(self.author.last_name)
+        }
 
 # #Schema dziedziczy z pakietu marshmalow ktory obrabia dane z bazy na jsona
 # class AuthorSchema(Schema):

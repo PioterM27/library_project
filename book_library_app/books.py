@@ -11,31 +11,17 @@ def get_books():
     books = Book.query.all()
     book_list=[]
     for book in books:
-        dicts={
-            "id" : book.id,
-            "title" : book.title,
-            "isbn" : book.isbn,
-            "number_of_pages" : book.number_of_pages,
-            "description" : book.description,
-            "author" : str(book.author.first_name) + ' ' + str(book.author.last_name)
-        }
-        book_list.append(dicts)
-    return jsonify(book_list)
+        book_list.append(book.to_json())
+    return jsonify({
+        'success': True,
+        'data': book_list
+    })
 
 
 @app.route('/api/v1/books/<int:book_id>', methods=['GET'])
 def get_book(book_id: int):
-    #author = Author.query.filter_by(id = author_id).one()
-    books = db.session.query(Book).filter(Book.id == book_id).all()
-    single_book = []
-    for book in books:
-        dicts = {"id": book.id, "title": book.title,
-                 "isbn": book.isbn,
-                 "number_of_pages": book.number_of_pages,
-                 "description": book.description,
-                 "author": str(book.author.first_name) + ' ' + str(book.author.last_name)}
-        single_book.append(dicts)
-    return jsonify(single_book)
+    books = Book.query.filter(Book.id == book_id).one()
+    return jsonify(books.to_json())
 
 @app.route('/api/v1/books/<int:book_id>', methods=['PUT'])
 def update_book(book_id: int):
@@ -91,14 +77,7 @@ def get_all_author_books(author_id: int):
     books = Book.query.filter(Book.author_id == author_id).all()
     book_list = []
     for book in books:
-        dicts = {"id": book.id,
-                 "title": book.title,
-                 "isbn": book.isbn,
-                 "number_of_pages": book.number_of_pages,
-                 "description": book.description,
-                 "author": str(book.author.first_name) + ' ' + str(book.author.last_name)}
-
-        book_list.append(dicts)
+        book_list.append(book.to_json())
     return jsonify({
         'success' : True,
         'data' : book_list,
