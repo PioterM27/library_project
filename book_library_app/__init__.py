@@ -1,8 +1,16 @@
 from flask import Flask
-from config import Config
-from flask_sqlalchemy import  SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import UserMixin,LoginManager
+from flask_login import LoginManager
+
+from config import Config
+
+from book_library_app import authors
+from book_library_app import books
+from book_library_app import models
+from book_library_app import auth
+from book_library_app import db_manage_commands
+from book_library_app import errors
 
 
 
@@ -24,9 +32,9 @@ migrate = Migrate(app, db)
 # chcac stworzyc nowa baze w comand linie mysql komenda create database nazwa_bazy
 #przesylajac argumenty do bazy przekazujemy je jawnie czuli name="Jan itp
 
-from book_library_app import authors
-from book_library_app import books
-from book_library_app import models
-from book_library_app import auth
-from book_library_app import db_manage_commands
-from book_library_app import errors
+# from book_library_app import authors
+# from book_library_app import books
+# from book_library_app import models
+# from book_library_app import auth
+# from book_library_app import db_manage_commands
+# from book_library_app import errors

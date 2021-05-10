@@ -1,9 +1,7 @@
 from flask import Response, jsonify
+
 from book_library_app import db
 from book_library_app import app
-
-
-
 
 class ErrorResponse:
     def __init__(self, message: str, http_status: int):
