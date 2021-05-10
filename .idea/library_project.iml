@@ -5,4 +5,7 @@
     <orderEntry type="jdk" jdkName="Python 3.8 (flask-book-library-api)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="D:\Python_Library_rest\library_project\requirements.txt" />
+  </component>
 </module>

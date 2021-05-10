@@ -1,7 +1,9 @@
 from flask import abort, jsonify,request
+from flask_login import login_required,login_user,logout_user,current_user
+
 from book_library_app import db,app
 from book_library_app.models import User
-from flask_login import login_required,login_user,logout_user,current_user
+from book_library_app.utils import session_scope
 
 
 @app.route('/register', methods=['POST'])
@@ -18,13 +20,13 @@ def register():
     user.password = request_register["password"]
     user.username = request_register["username"]
 
-    db.session.add(user)
-    db.session.commit()
+    with session_scope() as session:
+        session.add(user)
 
     token = user.generate_jwt()
 
     return jsonify({
-        'success': True,
+        'status': 201,
         'token': token
     }), 201
 
@@ -49,7 +51,8 @@ def logout():
     if crn_user:
         crn_user_name = current_user.username
         logout_user()
-        return jsonify({"success": True,
-                    "current_user": f"User {str(crn_user_name)} logout"})
+        return jsonify({"status": 200,
+                    "current_user": f"User {str(crn_user_name)} logout"}),200
     else:
-        return jsonify({"message": "Any user available at this session"})
+        return jsonify({"status":404,
+                        "message": "Any user available at this session"}),404

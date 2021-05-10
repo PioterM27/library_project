@@ -1,22 +1,11 @@
-import re
-from flask import request,url_for
-from book_library_app import db
-from marshmallow import Schema, fields, validate, validates, ValidationError  #pip install marshmallow obrabia dane z bazy w format json
-from  datetime import datetime
-from flask_sqlalchemy import BaseQuery
-from typing import Tuple
-from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+from datetime import datetime, date, timedelta
+
 from flask import current_app
 from flask_login import UserMixin
-from datetime import datetime, date, timedelta
-from marshmallow import Schema, fields, validate, validates, ValidationError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from book_library_app import db
-
-from sqlalchemy.orm.attributes import InstrumentedAttribute
-from sqlalchemy.sql.expression import BinaryExpression
 
 #Tworzymy clase ktora bedzie reprezentowala tabele w bazie dancyh
 
