@@ -5,12 +5,7 @@ from flask_login import LoginManager
 
 from config import Config
 
-from book_library_app import authors
-from book_library_app import books
-from book_library_app import models
-from book_library_app import auth
-from book_library_app import db_manage_commands
-from book_library_app import errors
+
 
 
 
@@ -23,6 +18,14 @@ login_manager.init_app(app)
 db = SQLAlchemy(app)
 #migrate sluzy do miggracji bazy danych
 migrate = Migrate(app, db)
+
+from book_library_app import authors
+from book_library_app import books
+from book_library_app import models
+from book_library_app import auth
+from book_library_app import orders
+from book_library_app import db_manage_commands
+from book_library_app import errors
 
 #test polaczenie do bazy dancyh
 # results = db.session.execute('show databases')

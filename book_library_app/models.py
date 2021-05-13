@@ -37,6 +37,7 @@ class User(UserMixin,db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+    book = db.relationship('Book',back_populates='user', secondary='orders')
     @staticmethod
     def generate_hashed_password(password: str) -> str:
         return generate_password_hash(password)
@@ -74,8 +75,10 @@ class Book(db.Model):
     isbn = db.Column(db.BigInteger, nullable=False, unique=True)
     number_of_pages = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text)
+    available = db.Column(db.Boolean, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('authors.id'), nullable=False)
     author = db.relationship('Author', back_populates='books')
+    user = db.relationship("User",back_populates="book", secondary='orders')
 
     def __repr__(self):
         return f'{self.title} - {self.author.first_name} {self.author.last_name}'
@@ -86,10 +89,30 @@ class Book(db.Model):
             "isbn": self.isbn,
             "number_of_pages": self.number_of_pages,
             "description": self.description,
-            "author": str(self.author.first_name) + ' ' + str(self.author.last_name)
+            "author": str(self.author.first_name) + ' ' + str(self.author.last_name),
+            "available":self.available
         }
+        return  book_to_json
+        #tu chyba book to json trzba zwrocic
 
-
+class OrderBook(db.Model):
+    __tablename__ = "orders"
+    # id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    title = db.Column(db.String(50), nullable=False)
+    orders_date = db.Column(db.DateTime, nullable=False)
+    expired_date = db.Column(db.DateTime, nullable=False)
+    def to_json(self):
+        orders_to_json ={
+            # "id" : self.id,
+            "book_id" : self.book_id,
+            "user_id" : self.user_id,
+            "title" : self.title,
+            "orders_date":self.orders_date,
+            "expired_date": self.expired_date
+        }
+        return orders_to_json
 # #Schema dziedziczy z pakietu marshmalow ktory obrabia dane z bazy na jsona
 # class AuthorSchema(Schema):
 #     id = fields.Integer(dump_only=True)

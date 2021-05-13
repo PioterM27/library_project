@@ -1,4 +1,4 @@
-from book_library_app import app,login_manager
+from book_library_app import login_manager
 from book_library_app.models import User
 from contextlib import contextmanager
 

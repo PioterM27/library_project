@@ -45,10 +45,10 @@ def add_data():
 def remove_data():
     """Remove all data from the database"""
     try:
-        db.session.execute('DELETE FROM books')
-        db.session.execute('ALTER TABLE books AUTO_INCREMENT = 1')
-        db.session.execute('DELETE FROM authors')
-        db.session.execute('ALTER TABLE authors AUTO_INCREMENT = 1')
+        db.session.execute('DELETE FROM orders')
+        db.session.execute('ALTER TABLE orders AUTO_INCREMENT = 1')
+        # db.session.execute('DELETE FROM authors')
+        # db.session.execute('ALTER TABLE authors AUTO_INCREMENT = 1')
         db.session.commit()
         print('Data has been successfully removed from the database')
     except Exception as exc:
